@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class PlayerControllerScript : MonoBehaviour
 {
+
+  [SerializeField]
+  private GameObjectPool fishPool;
+
   private Rigidbody rb;
   private Animator anim;
 
@@ -31,16 +35,16 @@ public class PlayerControllerScript : MonoBehaviour
        }
 
         if(Input.GetKey("a")) {
-            transform.Rotate(0, -4, 0);
+            transform.Rotate(0, -3, 0);
        }
 
         if(Input.GetKey("d")) {
-            transform.Rotate(0, 4, 0);
+            transform.Rotate(0, 3, 0);
         }
     }
 
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Fish")) 
-            other.gameObject.SetActive(false);
+           fishPool.ReturnToPool(other.gameObject);
     }
 }
