@@ -7,5 +7,8 @@ public class Deactivator : MonoBehaviour
     [SerializeField]
     private GameObjectPool fishPool;
 
-  private void OnTriggerEnter(Collider other) => fishPool.ReturnToPool(other.gameObject);
+    private void OnTriggerEnter(Collider other) {
+      if(other.CompareTag("Fish"))
+        fishPool.ReturnToPool(other.gameObject); 
+    }  
 }
