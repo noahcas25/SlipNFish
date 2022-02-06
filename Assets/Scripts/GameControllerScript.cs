@@ -24,6 +24,9 @@ public class GameControllerScript : MonoBehaviour
         fishPool.AddToPool(15);
         textPool.AddToPool(5);
         audio = GetComponent<AudioSource>();
+
+        audio.PlayOneShot(whistle);
+        timer.transform.GetChild(0).gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -73,7 +76,7 @@ public class GameControllerScript : MonoBehaviour
     public void GameOver() {
         gameOver = true;
         audio.PlayOneShot(whistle);
-        timer.transform.GetChild(0).gameObject.SetActive(true);
+        timer.transform.GetChild(1).gameObject.SetActive(true);
 
         StartCoroutine(GameOverDelay());
     }

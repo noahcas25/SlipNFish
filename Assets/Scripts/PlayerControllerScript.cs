@@ -32,7 +32,7 @@ public class PlayerControllerScript : MonoBehaviour
            rb.AddForce(transform.forward * 15f * Time.deltaTime , ForceMode.VelocityChange);
            anim.Play("Running");
            if(!audio.isPlaying) 
-            audio.PlayOneShot(walking);
+                audio.PlayOneShot(walking);
        }
        else if(Input.GetKey("s")) {
            rb.AddForce(transform.forward * 25f * Time.deltaTime, ForceMode.VelocityChange);
@@ -46,7 +46,7 @@ public class PlayerControllerScript : MonoBehaviour
 
         if(Input.GetKey("a")) {
             transform.Rotate(0, -6, 0);
-       }
+        }
 
         if(Input.GetKey("d")) {
             transform.Rotate(0, 6, 0);
