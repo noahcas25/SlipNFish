@@ -15,6 +15,7 @@ public class PlayerControllerScript : MonoBehaviour
   private Rigidbody rb;
   private Animator anim;
   private AudioSource audio;
+  private bool gameOver;
 
    void Start() {
        rb = GetComponent<Rigidbody>();
@@ -24,7 +25,8 @@ public class PlayerControllerScript : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        Move();
+        if(!gameOver)
+            Move();
     } 
 
       private void Move() {
@@ -52,6 +54,8 @@ public class PlayerControllerScript : MonoBehaviour
             transform.Rotate(0, 6, 0);
         }
     }
+
+    public void setGameOver(bool value) => this.gameOver = value;
 
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Fish")) {

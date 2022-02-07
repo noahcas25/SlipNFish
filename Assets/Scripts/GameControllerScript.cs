@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameControllerScript : MonoBehaviour
 {
     [SerializeField]
-    private GameObject fish, centerPoint, timer, UIscore, floatingText;
+    private GameObject player, fish, centerPoint, timer, UIscoreInGame, floatingText, UIFishCount, UIscoreEndGame, UIHighScore;
 
     [SerializeField]
     private GameObjectPool fishPool, textPool;
@@ -17,7 +18,7 @@ public class GameControllerScript : MonoBehaviour
     private AudioSource audio;
     private bool shouldSpawn = true;
     private bool gameOver;
-    private int score;
+    private int score, highScore = 0;
     private int count;
 
     void Start() {
@@ -27,6 +28,11 @@ public class GameControllerScript : MonoBehaviour
 
         audio.PlayOneShot(whistle);
         timer.transform.GetChild(0).gameObject.SetActive(true);
+    }
+
+    void OnEnable() {
+        if(PlayerPrefs.HasKey("Highscore"))
+            highScore = PlayerPrefs.GetInt("Highscore");
     }
 
     // Update is called once per frame
@@ -64,7 +70,7 @@ public class GameControllerScript : MonoBehaviour
         if(!gameOver) {
             timer.GetComponent<TimerScript>().AddTime(fish.GetComponent<FishControllerScipt>().getTimeValue());
             score += fish.GetComponent<FishControllerScipt>().getPointValue();
-            UIscore.GetComponent<TMPro.TextMeshProUGUI>().text = "" + score;
+            UIscoreInGame.GetComponent<TMPro.TextMeshProUGUI>().text = "" + score;
             if(fish.GetComponent<FishControllerScipt>().getPointValue() > 100) 
                 audio.PlayOneShot(penguinCall);
 
@@ -75,14 +81,25 @@ public class GameControllerScript : MonoBehaviour
 
     public void GameOver() {
         gameOver = true;
-        audio.PlayOneShot(whistle);
+        player.GetComponent<PlayerControllerScript>().setGameOver(gameOver);
         timer.transform.GetChild(1).gameObject.SetActive(true);
+        audio.PlayOneShot(whistle);
+
+        if(score > highScore) {
+            PlayerPrefs.SetInt("Highscore", score);
+            highScore = score;
+        }
+
+        UIFishCount.GetComponent<TMPro.TextMeshProUGUI>().text = count + "";
+        UIscoreEndGame.GetComponent<TMPro.TextMeshProUGUI>().text = score + "";
+        UIHighScore.GetComponent<TMPro.TextMeshProUGUI>().text = highScore + "";
 
         StartCoroutine(GameOverDelay());
     }
 
     IEnumerator GameOverDelay() {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1.5f);
+        transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
         Time.timeScale = 0f;
     }
 
@@ -104,4 +121,11 @@ public class GameControllerScript : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         shouldSpawn = true;
     }
+
+    public void Restart() { 
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("GameScene");
+    }
+
+    public void Quit() => Application.Quit();
 }

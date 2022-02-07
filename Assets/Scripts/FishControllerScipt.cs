@@ -5,7 +5,7 @@ using UnityEngine;
 public class FishControllerScipt : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 3;
+    private float speed = 5;
     [SerializeField]
     private int pointValue = 50;
     [SerializeField]
@@ -17,7 +17,7 @@ public class FishControllerScipt : MonoBehaviour
             changeScale(1f);
             setPointValue(200);
             setTimeValue(3);
-            setSpeed(5);
+            setSpeed(7);
         }
         else{
             changeScale(Random.Range(0.4f, 0.8f));
